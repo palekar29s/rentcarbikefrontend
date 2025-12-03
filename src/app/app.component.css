@@ -1,0 +1,78 @@
+nav {
+  background-color: #1e1e2f;
+  display: flex;
+  justify-content: center; /* Centers main content */
+  align-items: center;
+  position: relative; /* To position the button on the right */
+  padding: 15px 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 0 0 15px 15px;
+}
+
+/* Center section (Home, Booking, etc.) */
+.nav-center {
+  display: flex;
+  gap: 30px;
+}
+
+.nav-center a {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.nav-center a:hover,
+.nav-center a.active {
+  background-color: #3f3fff;
+  box-shadow: 0 2px 8px rgba(63, 63, 255, 0.5);
+}
+
+/* Login/Logout button (fixed right) */
+.nav-right {
+  position: absolute;
+  right: 30px;
+}
+
+.login-btn,
+button.login-btn {
+  background-color: #3f3fff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.login-btn:hover {
+  background-color: #2c2ccc;
+  transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 700px) {
+  nav {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+
+  .nav-center {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .nav-right {
+    position: static;
+  }
+
+  .login-btn {
+    width: 90%;
+  }
+}

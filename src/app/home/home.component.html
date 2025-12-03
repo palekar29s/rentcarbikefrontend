@@ -1,0 +1,61 @@
+<!-- Hero Section -->
+<section class="hero">
+  <img src="assets/carbikebanner.png" alt="Home Banner" class="home-banner" />
+  <div class="hero-text">
+    <h1>Welcome to FastRent</h1>
+    <p>Rent Cars & Bikes Easily, Anytime, Anywhere!</p>
+    <a routerLink="/booking" class="cta-btn">Book Now</a>
+  </div>
+</section>
+
+<!-- Services Section -->
+<section class="services">
+  <h2>Book Your Ride</h2>
+  <div class="service-cards">
+    <div class="card">
+      <img src="assets/car.png" alt="Car" />
+      <h3>Cars</h3>
+      <p>Choose from a wide range of cars for your trip.</p>
+      <a routerLink="/booking?type=car" class="cta-btn">Book Car</a>
+    </div>
+    <div class="card">
+      <img src="assets/bike.png" alt="Bike" />
+      <h3>Bikes</h3>
+      <p>Fast and easy bike rentals for your daily needs.</p>
+      <a routerLink="/booking?type=bike" class="cta-btn">Book Bike</a>
+    </div>
+  </div>
+</section>
+
+<!-- Search Section -->
+<section class="search-bar">
+  <h2>Find Your Vehicle</h2>
+  <form>
+    <!-- Vehicle Type -->
+    <select [(ngModel)]="filter.vehicle" (change)="filterVehicles()" name="vehicle">
+      <option value="">Select Vehicle</option>
+      <option value="car">Car</option>
+      <option value="bike">Bike</option>
+    </select>
+
+    <!-- Check-in Date -->
+    <input type="date" [(ngModel)]="filter.checkin" (change)="filterVehicles()" name="checkin" />
+
+    <!-- Check-out Date -->
+    <input type="date" [(ngModel)]="filter.checkout" (change)="filterVehicles()" name="checkout" />
+
+    <!-- Location -->
+    <select [(ngModel)]="filter.location" (change)="filterVehicles()" name="location">
+      <option value="">Select Location</option>
+      <option value="mumbai">Mumbai</option>
+      <option value="navi-mumbai">Navi Mumbai</option>
+    </select>
+  </form>
+</section>
+
+
+<!-- Info Section -->
+<section class="info">
+  <h2>Why Choose FastRent?</h2>
+  <p>We provide affordable and reliable cars & bikes for your trips. Safe, insured, and easy to book!</p>
+</section>

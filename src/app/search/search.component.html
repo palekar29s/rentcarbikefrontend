@@ -1,0 +1,48 @@
+<section class="search-section">
+  <h2>Find Your Vehicle</h2>
+  <form>
+    <!-- Vehicle Type -->
+    <select [(ngModel)]="filter.vehicle" name="vehicle" (change)="searchVehicles()">
+      <option value="">Select Vehicle</option>
+      <option value="car">Car</option>
+      <option value="bike">Bike</option>
+    </select>
+
+    <!-- Check-in Date -->
+    <input type="date" [(ngModel)]="filter.checkin" name="checkin" (change)="searchVehicles()" />
+
+    <!-- Check-out Date -->
+    <input type="date" [(ngModel)]="filter.checkout" name="checkout" (change)="searchVehicles()" />
+
+    <!-- Location -->
+    <select [(ngModel)]="filter.location" name="location" (change)="searchVehicles()">
+      <option value="">Select Location</option>
+      <option value="mumbai">Mumbai</option>
+      <option value="navi-mumbai">Navi Mumbai</option>
+    </select>
+
+    <!-- Car Seats (only for cars) -->
+    <select *ngIf="filter.vehicle === 'car'" [(ngModel)]="filter.seats" name="seats" (change)="searchVehicles()">
+      <option value="">Select Seats</option>
+      <option value="4">4 Seats</option>
+      <option value="6">6 Seats</option>
+    </select>
+  </form>
+
+  <div class="results" *ngIf="vehicles.length > 0">
+    <h3>Available Vehicles</h3>
+    <div class="vehicle-cards">
+      <div class="card" *ngFor="let v of vehicles" (click)="goToBooking(v.id)">
+        <img [src]="v.image" alt="{{v.name}}" />
+        <h4>{{v.name}}</h4>
+        <p>Type: {{v.type}}</p>
+        <p *ngIf="v.type === 'car'">Seats: {{v.seats}}</p>
+        <p>Location: {{v.location}}</p>
+        <p>Price: ₹{{v.price}}/day</p>
+      <!--  <a [routerLink]="['/booking']" [queryParams]="{vehicleId: v.id}" class="cta-btn">Book Now</a> -->
+      </div>
+    </div>
+  </div>
+
+  <p *ngIf="vehicles.length === 0 && searched">No vehicles found.</p>
+</section>
