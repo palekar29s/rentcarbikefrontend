@@ -18,7 +18,7 @@ interface Vehicle {
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit {
-  vehicles: Vehicle[] = [];       // All vehicles
+  vehicles: Vehicle[] = [];         // All vehicles (optional)
   filteredVehicles: Vehicle[] = []; // Vehicles after filtering
 
   filter = {
@@ -28,35 +28,37 @@ export class HomeComponent implements OnInit {
     location: ''
   };
 
-  ngOnInit(): void {
-    // Example vehicles — replace with API call later
-    this.vehicles = [
-      { type: 'car', name: 'Sedan', location: 'mumbai', availableFrom: '2025-11-06', availableTo: '2025-11-30' },
-      { type: 'bike', name: 'Scooter', location: 'navi-mumbai', availableFrom: '2025-11-05', availableTo: '2025-11-20' },
-      { type: 'car', name: 'SUV', location: 'navi-mumbai', availableFrom: '2025-11-07', availableTo: '2025-11-25' }
-    ];
+  constructor(private http: HttpClient) {} // <-- Inject HttpClient
 
-    // Initial filtered list
-    this.filteredVehicles = [...this.vehicles];
+  ngOnInit(): void {
+    // Optional: Fetch all vehicles initially from API
+    this.getVehicles();
   }
 
+  // Fetch all vehicles from API
+  getVehicles(): void {
+    this.http.get<Vehicle[]>('https://api.example.com/vehicles') // Replace with your API URL
+      .subscribe(data => {
+        this.vehicles = data;
+        this.filteredVehicles = data.slice(0, 3); // Show only first 3 vehicles initially
+      }, error => {
+        console.error('Error fetching vehicles:', error);
+      });
+  }
+
+  // Filter vehicles using API
   filterVehicles(): void {
-    this.filteredVehicles = this.vehicles.filter(v => {
-      const matchesVehicle = this.filter.vehicle ? v.type === this.filter.vehicle : true;
-      const matchesLocation = this.filter.location ? v.location === this.filter.location : true;
+    let params = new HttpParams();
+    if (this.filter.vehicle) params = params.set('type', this.filter.vehicle);
+    if (this.filter.location) params = params.set('location', this.filter.location);
+    if (this.filter.checkin) params = params.set('checkin', this.filter.checkin);
+    if (this.filter.checkout) params = params.set('checkout', this.filter.checkout);
 
-      let matchesDate = true;
-      if (this.filter.checkin && this.filter.checkout) {
-        const checkin = new Date(this.filter.checkin);
-        const checkout = new Date(this.filter.checkout);
-        const availableFrom = new Date(v.availableFrom);
-        const availableTo = new Date(v.availableTo);
-
-        // Check if the vehicle is available during the selected period
-        matchesDate = checkin >= availableFrom && checkout <= availableTo;
-      }
-
-      return matchesVehicle && matchesLocation && matchesDate;
-    });
+    this.http.get<Vehicle[]>('https://api.example.com/vehicles', { params }) // Replace with your API URL
+      .subscribe(data => {
+        this.filteredVehicles = data.slice(0, 3); // Limit to 3 results
+      }, error => {
+        console.error('Error fetching filtered vehicles:', error);
+      });
   }
 }
