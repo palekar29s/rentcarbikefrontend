@@ -1,1 +1,29 @@
-<p>login works!</p>
+<div class="login-container">
+  <h2>Login</h2>
+
+  <form (ngSubmit)="login()" *ngIf="!isLoggedIn">
+    <div>
+      <label>Username:</label>
+      <input type="text" [(ngModel)]="username" name="username" required>
+    </div>
+
+    <div class="password-container">
+      <label>Password:</label>
+      <input [type]="passwordType" [(ngModel)]="passwordHash" name="password" required>
+
+      <span (click)="togglePasswordVisibility()" class="eye-icon">
+        <i [class]="passwordType === 'password' ? 'fa fa-eye-slash' : 'fa fa-eye'"></i>
+      </span>
+    </div>
+
+    <button type="submit">Login</button>
+    <div *ngIf="loginError" class="error">{{ loginError }}</div>
+  </form>
+
+  <div *ngIf="isLoggedIn">
+    <p>Welcome, {{ username }}!</p>
+    <button (click)="logout()">Logout</button>
+  </div>
+
+  <button (click)="goToRegister()" *ngIf="!isLoggedIn">Register</button>
+</div>

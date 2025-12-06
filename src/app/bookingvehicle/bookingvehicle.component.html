@@ -1,0 +1,46 @@
+<div *ngIf="vehicle" class="detail-wrapper">
+
+  <!-- IMAGE SLIDER -->
+  <div class="slider-container">
+    
+    <button class="slider-btn left" (click)="prevImage()">&#10094;</button>
+
+    <img
+      [src]="vehicle.images[currentImageIndex]?.imageUrl"
+      class="slider-main-img"
+    />
+
+    <button class="slider-btn right" (click)="nextImage()">&#10095;</button>
+
+  </div>
+
+  <!-- THUMB IMAGES -->
+  <div class="thumb-row">
+    <img
+      *ngFor="let img of vehicle.images; let i = index"
+      [src]="img.imageUrl"
+      class="thumb-img"
+      [class.active]="i === currentImageIndex"
+      (click)="goToImage(i)"
+    />
+  </div>
+
+  <!-- VEHICLE DETAILS -->
+  <div class="details-box">
+    <h2>{{ vehicle.name }}</h2>
+
+    <p><b>Brand:</b> {{ vehicle.brand }}</p>
+    <p><b>Model:</b> {{ vehicle.model }}</p>
+    <p><b>Type:</b> {{ vehicle.type }}</p>
+    <p><b>Fuel:</b> {{ vehicle.fueltype }}</p>
+    <p><b>Transmission:</b> {{ vehicle.transmission }}</p>
+
+    <p><b>Price (Hour):</b> ₹{{ vehicle.priceperhour }}</p>
+    <p><b>Price (Day):</b> ₹{{ vehicle.priceperday }}</p>
+
+    <p><b>Status:</b> {{ vehicle.status }}</p>
+
+    <button class="book-btn">Book Now</button>
+  </div>
+
+</div>

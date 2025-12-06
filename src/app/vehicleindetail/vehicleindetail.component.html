@@ -1,0 +1,24 @@
+<div *ngIf="vehicle" class="details-container">
+
+  <h1>{{ vehicle.name }}</h1>
+
+  <!-- Vehicle Image -->
+  <img [src]="vehicle.imageUrl" class="vehicle-image" alt="Vehicle">
+
+  <h3>Vehicle Information</h3>
+  <p><strong>Type:</strong> {{ vehicle.type }}</p>
+  <p><strong>Brand:</strong> {{ vehicle.brand }}</p>
+  <p><strong>Model:</strong> {{ vehicle.model }}</p>
+  <p><strong>Fuel Type:</strong> {{ vehicle.fueltype }}</p>
+  <p><strong>Transmission:</strong> {{ vehicle.transmission }}</p>
+
+  <h3>Pricing</h3>
+  <p><strong>Per Hour:</strong> ₹{{ vehicle.priceperhour }}</p>
+  <p><strong>Per Day:</strong> ₹{{ vehicle.priceperday }}</p>
+
+  <h3>Status</h3>
+  <p><strong>{{ vehicle.status }}</strong></p>
+
+</div>
+
+
