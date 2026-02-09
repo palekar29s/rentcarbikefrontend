@@ -1,0 +1,90 @@
+<form (ngSubmit)="onSubmit(form)" #form="ngForm" novalidate>
+
+  <!-- USERNAME -->
+  <label>Username</label>
+  <input
+    type="text"
+    name="username"
+    [(ngModel)]="user.username"
+    #username="ngModel"
+    required
+  />
+  <small *ngIf="username.invalid && username.touched">
+    Username is required
+  </small>
+
+
+  <!-- PASSWORD -->
+  <label>Password</label>
+  <input
+    type="password"
+    name="passwordHash"
+    [(ngModel)]="user.passwordHash"
+    #password="ngModel"
+    required
+    minlength="8"
+  />
+  <small *ngIf="password.errors?.['required'] && password.touched">
+    Password is required
+  </small>
+  <small *ngIf="password.errors?.['minlength'] && password.touched">
+    Minimum 8 characters required
+  </small>
+
+
+  <!-- FULL NAME -->
+  <label>Full Name</label>
+  <input
+    type="text"
+    name="fullName"
+    [(ngModel)]="user.fullName"
+    #fullName="ngModel"
+    required
+  />
+  <small *ngIf="fullName.invalid && fullName.touched">
+    Full Name is required
+  </small>
+
+
+  <!-- EMAIL -->
+  <label>Email</label>
+  <input
+    type="email"
+    name="email"
+    [(ngModel)]="user.email"
+    #email="ngModel"
+    required
+    email
+  />
+  <small *ngIf="email.errors?.['required'] && email.touched">
+    Email is required
+  </small>
+  <small *ngIf="email.errors?.['email'] && email.touched">
+    Enter valid email address
+  </small>
+
+
+  <!-- PHONE -->
+  <label>Phone</label>
+  <input
+    type="text"
+    name="phone"
+    [(ngModel)]="user.phone"
+    #phone="ngModel"
+    required
+    pattern="^[0-9]{10}$"
+  />
+  <small *ngIf="phone.errors?.['required'] && phone.touched">
+    Phone number is required
+  </small>
+  <small *ngIf="phone.errors?.['pattern'] && phone.touched">
+    Enter valid 10 digit number
+  </small>
+
+
+  <!-- SUBMIT -->
+  <button type="submit" [disabled]="form.invalid">
+    Register
+  </button>
+
+</form>

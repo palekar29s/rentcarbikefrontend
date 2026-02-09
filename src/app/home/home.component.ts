@@ -1,16 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 interface Vehicle {
-  type: string;
-  name: string;
+  vehicleId: number;
+  vehicleType: string;
+  vehicleName: string;
   location: string;
-  availableFrom: string; // YYYY-MM-DD
-  availableTo: string;   // YYYY-MM-DD
+  pricePerDay: number;
+  status: string;
+  imagePath: string;
 }
-
   
 @Component({
   selector: 'app-home',
@@ -19,47 +20,56 @@ interface Vehicle {
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit {
-  vehicles: Vehicle[] = [];         // All vehicles (optional)
-  filteredVehicles: Vehicle[] = []; // Vehicles after filtering
 
-  filter = {
-    vehicle: '',
-    checkin: '',
-    checkout: '',
-    location: ''
-  };
+  /* HERO SLIDER */
+  heroImages = [
+    'assets/Rentcarbanner.jpg',
+    'assets/carbikerent.png'
+  ];
+  currentHeroIndex = 0;
 
-  constructor(private http: HttpClient) {} // <-- Inject HttpClient
+  /* VEHICLES */
+  allVehicles: Vehicle[] = [];
+  displayVehicles: Vehicle[] = [];
+
+  /* STEPS */
+  steps: string[] = [
+    'Search Bike or Car',
+    'Select Car & Bike',
+    'Details Fill & Confirm',
+    'Payment',
+    'Booking Done'
+  ];
+  currentStep = 1;
+
+  @ViewChild('stepsSection') stepsSection!: ElementRef;
+
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-    // Optional: Fetch all vehicles initially from API
-    this.getVehicles();
+    this.startHeroSlider();
+   
   }
 
-  // Fetch all vehicles from API
-  getVehicles(): void {
-    this.http.get<Vehicle[]>('https://api.example.com/vehicles') // Replace with your API URL
-      .subscribe(data => {
-        this.vehicles = data;
-        this.filteredVehicles = data.slice(0, 3); // Show only first 3 vehicles initially
-      }, error => {
-        console.error('Error fetching vehicles:', error);
-      });
+  startHeroSlider() {
+    setInterval(() => {
+      this.currentHeroIndex =
+        (this.currentHeroIndex + 1) % this.heroImages.length;
+    }, 4000);
   }
 
-  // Filter vehicles using API
-  filterVehicles(): void {
-    let params = new HttpParams();
-    if (this.filter.vehicle) params = params.set('type', this.filter.vehicle);
-    if (this.filter.location) params = params.set('location', this.filter.location);
-    if (this.filter.checkin) params = params.set('checkin', this.filter.checkin);
-    if (this.filter.checkout) params = params.set('checkout', this.filter.checkout);
+  
+  scrollToSteps() {
+    this.stepsSection.nativeElement.scrollIntoView({
+      behavior: 'smooth'
+    });
+  }
 
-    this.http.get<Vehicle[]>('https://api.example.com/vehicles', { params }) // Replace with your API URL
-      .subscribe(data => {
-        this.filteredVehicles = data.slice(0, 3); // Limit to 3 results
-      }, error => {
-        console.error('Error fetching filtered vehicles:', error);
-      });
+  nextStep() {
+    if (this.currentStep < this.steps.length) this.currentStep++;
+  }
+
+  prevStep() {
+    if (this.currentStep > 1) this.currentStep--;
   }
 }

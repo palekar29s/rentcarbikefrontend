@@ -1,59 +1,109 @@
 <section class="search-section">
   <h2>Find Your Vehicle</h2>
 
-  <!-- Filters -->
-  <form class="filters">
-    <select [(ngModel)]="filter.vehicle" name="vehicle" (change)="onVehicleChange()">
-      <option value="">All Vehicles</option>
-      <option value="car">Car</option>
-      <option value="bike">Bike</option>
-    </select>
+  <!-- CAR / BIKE TABS -->
+  <div class="vehicle-tabs">
+    <button
+      [class.active]="filter.vehicle === 'car'"
+      (click)="selectVehicleType('car')">
+      🚗 Cars
+    </button>
 
-    <input type="date" [(ngModel)]="filter.checkin" name="checkin" (change)="searchVehicles()" />
-    <input type="date" [(ngModel)]="filter.checkout" name="checkout" (change)="searchVehicles()" />
+    <button
+      [class.active]="filter.vehicle === 'bike'"
+      (click)="selectVehicleType('bike')">
+      🏍 Bikes
+    </button>
+  </div>
 
-    <select [(ngModel)]="filter.location" name="location" (change)="searchVehicles()">
+  <!-- FILTERS -->
+<form class="filters">
+
+  <!-- CHECK-IN -->
+  <div class="filter-item">
+    <label>📅 Pick-up Date</label>
+    <input
+      type="date"
+      [(ngModel)]="filter.checkin"
+      name="checkin"
+      (change)="searchVehicles()" />
+  </div>
+
+  <!-- CHECK-OUT -->
+  <div class="filter-item">
+    <label>📅 Drop-off Date</label>
+    <input
+      type="date"
+      [(ngModel)]="filter.checkout"
+      name="checkout"
+      (change)="searchVehicles()" />
+  </div>
+
+  <!-- LOCATION -->
+  <div class="filter-item">
+    <label>📍 Location</label>
+    <select
+      [(ngModel)]="filter.location"
+      name="location"
+      (change)="searchVehicles()">
       <option value="">Select Location</option>
       <option value="mumbai">Mumbai</option>
       <option value="navi-mumbai">Navi Mumbai</option>
     </select>
+  </div>
 
-    <select *ngIf="filter.vehicle === 'car'" [(ngModel)]="filter.seats" name="seats" (change)="searchVehicles()">
+  <!-- SEATS (ONLY CAR) -->
+  <div class="filter-item" *ngIf="filter.vehicle === 'car'">
+    <label>🪑 Seats</label>
+    <select
+      [(ngModel)]="filter.seats"
+      name="seats"
+      (change)="searchVehicles()">
       <option value="">Select Seats</option>
       <option value="4">4 Seats</option>
       <option value="6">6 Seats</option>
     </select>
-  </form>
+  </div>
 
-  <!-- Vehicle Cards -->
- <div class="vehicle-cards">
-  <div class="card" *ngFor="let v of vehicles" (click)="goToBooking(v.vehicleId)">
+</form>
 
-    <!-- IMAGE CLICK → OPEN MODAL ONLY -->
-    <img class="main-image"
-         [src]="v.imageUrl"
-         alt="{{v.name}}"
-         (click)="openImageModal(v); $event.stopPropagation()" />
 
-    <div class="vehicle-info">
-      <h4>{{v.name}}</h4>
-      <p>Type: {{v.type}}</p>
-      <p *ngIf="v.type === 'car' && v.seats">Seats: {{v.seats}}</p>
-      <p>Price: ₹{{v.priceperday}}/day</p>
-      <p>Status: {{v.status}}</p>
+  <!-- VEHICLE CARDS -->
+  <div class="vehicle-cards">
+    <div
+      class="card"
+      *ngFor="let v of vehicles"
+      (click)="goToBooking(v.vehicleId)">
+
+      <!-- IMAGE CLICK → MODAL -->
+      <img
+        class="main-image"
+        [src]="v.imageUrl"
+        alt="{{ v.name }}"
+        (click)="openImageModal(v, $event)" />
+
+      <div class="vehicle-info">
+        <h4>{{ v.name }}</h4>
+        <p>Type: {{ v.type }}</p>
+        <p *ngIf="v.type === 'car'">Seats: {{ v.seats }}</p>
+        <p>Price: ₹{{ v.pricePerDay }}/day</p>
+        <p>Status: {{ v.status }}</p>
+      </div>
     </div>
   </div>
-</div>
-
 </section>
 
-<!-- Modal for all images -->
-<div class="modal" *ngIf="selectedVehicle">
-  <div class="modal-content">
+<!-- IMAGE MODAL -->
+<div class="modal" *ngIf="selectedVehicle" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
     <span class="close" (click)="closeModal()">&times;</span>
-    <h3>{{selectedVehicle.name}} - Images</h3>
+    <h3>{{ selectedVehicle.name }} - Images</h3>
+
     <div class="all-images">
-      <img *ngFor="let img of selectedVehicle.images" [src]="img.imageUrl" />
+      <img
+        *ngFor="let img of selectedVehicle.images"
+        [src]="img.imageUrl"
+        alt="vehicle image" />
     </div>
   </div>
 </div>

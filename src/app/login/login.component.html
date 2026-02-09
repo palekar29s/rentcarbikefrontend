@@ -1,29 +1,76 @@
 <div class="login-container">
+
   <h2>Login</h2>
 
-  <form (ngSubmit)="login()" *ngIf="!isLoggedIn">
-    <div>
-      <label>Username:</label>
-      <input type="text" [(ngModel)]="username" name="username" required>
+  <form *ngIf="!isLoggedIn" (ngSubmit)="login()">
+
+    <!-- USERNAME -->
+    <div class="form-group">
+      <label>Username</label>
+      <input
+        type="text"
+        [(ngModel)]="username"
+        name="username"
+        required
+        placeholder="Enter username"
+      />
     </div>
 
-    <div class="password-container">
-      <label>Password:</label>
-      <input [type]="passwordType" [(ngModel)]="passwordHash" name="password" required>
+    <!-- PASSWORD -->
+    <div class="form-group password-container">
 
-      <span (click)="togglePasswordVisibility()" class="eye-icon">
-        <i [class]="passwordType === 'password' ? 'fa fa-eye-slash' : 'fa fa-eye'"></i>
-      </span>
+      <label>Password</label>
+
+      <!-- wrapper IMPORTANT -->
+      <div class="password-wrapper">
+
+        <input
+          [type]="passwordType"
+          [(ngModel)]="passwordHash"
+          name="password"
+          required
+          minlength="8"
+          maxlength="8"
+          placeholder="Enter 8 character password"
+        />
+
+        <!-- EYE ICON -->
+        <button
+          type="button"
+          class="eye-btn"
+          (click)="togglePasswordVisibility()">
+
+          <i
+            class="fa-solid"
+            [ngClass]="passwordType === 'password'
+              ? 'fa-eye-slash'
+              : 'fa-eye'">
+          </i>
+
+        </button>
+
+      </div>
     </div>
 
-    <button type="submit">Login</button>
-    <div *ngIf="loginError" class="error">{{ loginError }}</div>
+    <button type="submit" class="login-btn">Login</button>
+
+    <div *ngIf="loginError" class="error">
+      {{ loginError }}
+    </div>
+
   </form>
 
-  <div *ngIf="isLoggedIn">
-    <p>Welcome, {{ username }}!</p>
+  <!-- LOGGED IN -->
+  <div *ngIf="isLoggedIn" class="welcome-box">
+    <p>Welcome, <b>{{ username }}</b> 👋</p>
     <button (click)="logout()">Logout</button>
   </div>
 
-  <button (click)="goToRegister()" *ngIf="!isLoggedIn">Register</button>
+  <button
+    class="register-btn"
+    *ngIf="!isLoggedIn"
+    (click)="goToRegister()">
+    Register
+  </button>
+
 </div>

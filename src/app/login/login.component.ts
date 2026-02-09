@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from '../login.service';
 import { FormsModule } from '@angular/forms';
@@ -10,86 +10,74 @@ import { CommonModule } from '@angular/common';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 
   username: string = '';
-  passwordHash: string = ''; // FIXED
+  passwordHash: string = '';
   loginDetails: any[] = [];
   loginError: string = '';
   isLoggedIn: boolean = false;
-  isAdmin: boolean = false;
   passwordType: string = 'password';
 
-  constructor(private loginService: LoginService, private router: Router) {}
+  constructor(
+    private loginService: LoginService,
+    private router: Router
+  ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.fetchLoginDetails();
     this.checkLoginStatus();
   }
 
-  fetchLoginDetails() {
-    this.loginService.getLoginDetails().subscribe(
-      (data) => {
-        this.loginDetails = data;
-      },
-      (error) => {
-        console.error('Error fetching login details', error);
-      }
-    );
+  fetchLoginDetails(): void {
+    this.loginService.getLoginDetails().subscribe({
+      next: (data) => this.loginDetails = data,
+      error: () => this.loginError = 'Server error. Try again later.'
+    });
   }
 
-  login() {
+  login(): void {
     const user = this.loginDetails.find(
-      (u) => u.username === this.username && u.passwordHash === this.passwordHash
+      u =>
+        u.username === this.username &&
+        u.passwordHash === this.passwordHash
     );
 
-    if (user) {
-      this.loginError = '';
-      this.isLoggedIn = true;
-
-      localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('username', this.username);
-
-      // Admin check
-      if (this.username === 'admin' && this.passwordHash === '2922004') {
-        alert('Admin Login');
-        this.isAdmin = true;
-        localStorage.setItem('isAdmin', 'true');
-      } else {
-        this.isAdmin = false;
-        localStorage.removeItem('isAdmin');
-      }
-
-      this.router.navigate(['/home']);
-    } else {
+    if (!user) {
       this.loginError = 'Invalid username or password';
+      return;
     }
+
+    // ✅ Store userId + username
+    this.loginService.setLoggedInUser(user);
+
+    this.isLoggedIn = true;
+    this.loginError = '';
+
+    this.router.navigate(['/home']);
   }
 
-  logout() {
+  logout(): void {
+    this.loginService.logout();
     this.isLoggedIn = false;
-    this.isAdmin = false;
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('username');
-    localStorage.removeItem('isAdmin');
-    this.router.navigate(['/signup']);
+    this.username = '';
+    this.passwordHash = '';
+    this.router.navigate(['/login']);
   }
 
-  goToRegister() {
-    this.router.navigate(['/register']);
-  }
-
-  checkLoginStatus() {
-    this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    this.username = localStorage.getItem('username') || '';
-    this.isAdmin = localStorage.getItem('isAdmin') === 'true';
-  }
-
-  canModifyProperties(): boolean {
-    return this.isAdmin && this.isLoggedIn;
+  checkLoginStatus(): void {
+    this.isLoggedIn = this.loginService.isLoggedIn();
+    this.username = this.loginService.getUsername();
   }
 
   togglePasswordVisibility(): void {
-    this.passwordType = this.passwordType === 'password' ? 'text' : 'password';
+  this.passwordType =
+    this.passwordType === 'password' ? 'text' : 'password';
+}
+
+
+  goToRegister(): void {
+    this.router.navigate(['/register']);
   }
+  
 }

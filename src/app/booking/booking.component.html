@@ -1,42 +1,40 @@
-<section class="booking-page">
-  <h2>Booking Details</h2>
+<div class="booking-container">
+  <h2>Create Booking</h2>
 
-  <!-- Tabs -->
-  <div class="tabs">
-    <button [class.active]="activeTab === 'booking'" (click)="activeTab = 'booking'">Book Vehicle</button>
-    <button [class.active]="activeTab === 'history'" (click)="activeTab = 'history'">Booking History</button>
-  </div>
+  <form (ngSubmit)="submitBooking()">
 
-  <!-- Booking Section -->
-  <div *ngIf="activeTab === 'booking'" class="booking-section">
-    <h3>Available Vehicles</h3>
-    <div class="vehicle-cards">
-      <div class="card" *ngFor="let v of vehicles" (click)="bookVehicle(v.id)">
-        <img [src]="v.image" alt="{{v.name}}" />
-        <h4>{{v.name}}</h4>
-        <p>Type: {{v.type}}</p>
-        <p *ngIf="v.type === 'car'">Seats: {{v.seats}}</p>
-        <p>Location: {{v.location}}</p>
-        <p>Price: ₹{{v.price}}/day</p>
-        <button class="cta-btn">Book Now</button>
-      </div>
-    </div>
-  </div>
+    <!-- 🔹 LOGGED-IN USER ID (SEPARATE) -->
+    <label>Logged-in User ID</label>
+    <input
+      type="number"
+      [value]="loggedInUserId"
+      readonly
+    >
 
-  <!-- History Section -->
-  <div *ngIf="activeTab === 'history'" class="history-section">
-    <h3>Your Past Bookings</h3>
-    <div class="history-cards" *ngIf="history.length > 0">
-      <div class="card" *ngFor="let h of history">
-        <p><strong>Vehicle:</strong> {{h.name}} ({{h.type}})</p>
-        <p *ngIf="h.type === 'car'"><strong>Seats:</strong> {{h.seats}}</p>
-        <p><strong>Location:</strong> {{h.location}}</p>
-        <p><strong>From:</strong> {{h.fromDate | date}}</p>
-        <p><strong>To:</strong> {{h.toDate | date}}</p>
-        <p><strong>Price:</strong> ₹{{h.price}}</p>
-        <p><strong>Status:</strong> {{h.status}}</p>
-      </div>
-    </div>
-    <p *ngIf="history.length === 0">You have no past bookings.</p>
-  </div>
-</section>
+    <!-- VEHICLE ID auto -->
+    <label>Vehicle ID</label>
+    <input type="number" [(ngModel)]="bookingData.vehicleId" name="vehicleId" readonly>
+
+    <!-- Show prices from vehicle page -->
+    <p><b>Price / Day:</b> ₹{{ pricePerDay }}</p>
+    <p><b>Price / Hour:</b> ₹{{ pricePerHour }}</p>
+
+    <!-- DATES manual -->
+    <label>Start Date & Time</label>
+    <input type="datetime-local" [(ngModel)]="bookingData.startDate" name="startDate" required>
+
+    <label>End Date & Time</label>
+    <input type="datetime-local" [(ngModel)]="bookingData.endDate" name="endDate" required>
+
+    <!-- Calculate total price -->
+    <button type="button" (click)="calculateTotalPrice()">
+      Calculate Total Price
+    </button>
+
+    <!-- TOTAL PRICE -->
+    <label>Total Price (₹)</label>
+    <input type="number" [(ngModel)]="bookingData.totalPrice" name="totalPrice" required>
+
+    <button type="submit">Create Booking</button>
+  </form>
+</div>

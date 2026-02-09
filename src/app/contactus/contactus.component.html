@@ -1,1 +1,37 @@
-<p>contactus works!</p>
+<div class="contact-container">
+
+  <h2>Contact Us</h2>
+  <p>Have questions about our Car & Bike Rental services? Reach out anytime!</p>
+
+  <!-- Company Information Section -->
+  <div class="company-info">
+    <h3>{{ companyName }}</h3>
+
+    <p><strong>📞 Phone:</strong> {{ companyPhone }}</p>
+    <p><strong>📧 Email:</strong> {{ companyEmail }}</p>
+    <p><strong>📍 Address:</strong> {{ companyAddress }}</p>
+    <p><strong>⏰ Working Hours:</strong> {{ companyHours }}</p>
+  </div>
+
+  <hr>
+
+  <!-- Contact Form -->
+  <form (ngSubmit)="submitForm()" class="contact-form">
+
+    <label>Your Name</label>
+    <input type="text" [(ngModel)]="name" name="name" required>
+
+    <label>Email Address</label>
+    <input type="email" [(ngModel)]="email" name="email" required>
+
+    <label>Phone Number</label>
+    <input type="text" [(ngModel)]="phone" name="phone" required>
+
+    <label>Your Message</label>
+    <textarea rows="4" [(ngModel)]="message" name="message" required></textarea>
+
+    <button type="submit" class="submit-btn">Send Message</button>
+  </form>
+
+  <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
+</div>
