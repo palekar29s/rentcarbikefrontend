@@ -1,0 +1,43 @@
+<h2>My Booking History</h2>
+
+<!-- Logged-in User Info -->
+<p class="user-info">
+  <strong>User ID:</strong> {{ userId }}
+</p>
+
+<table *ngIf="bookings.length > 0; else noBookings">
+  <thead>
+    <tr>
+      <th>Booking ID</th>
+      <th>User ID</th>
+      <th>Username</th>
+      <th>Vehicle ID</th>
+      <th>Start Date</th>
+      <th>End Date</th>
+      <th>Total Price</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let b of bookings">
+      <td>{{ b.bookingId }}</td>
+      <td>{{ b.userId }}</td>
+      <td>{{ b.username }}</td>
+      <td>{{ b.vehicleId }}</td>
+      <td>{{ b.startDate | date:'short' }}</td>
+      <td>{{ b.endDate | date:'short' }}</td>
+      <td>₹{{ b.totalPrice }}</td>
+      <td>
+        <span
+          [style.color]="b.bookingStatus === 'Payment Done' ? 'green' : 'orange'">
+          {{ b.bookingStatus }}
+        </span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<ng-template #noBookings>
+  <p>No bookings found.</p>
+</ng-template>

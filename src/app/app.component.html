@@ -1,23 +1,20 @@
-<nav *ngIf="!isLoginPage">
+<nav>
   <div class="nav-center">
     <a routerLink="/home" routerLinkActive="active">Home</a>
     <a routerLink="/booking" routerLinkActive="active">Booking</a>
     <a routerLink="/contactus" routerLinkActive="active">Contact</a>
     <a routerLink="/search" routerLinkActive="active">Search</a>
-  </div>
-
-  <div class="nav-right">
-    <!-- Login shown if user not logged in -->
+        <a routerLink="/bookinghis" routerLinkActive="active">Booking History</a>
+    <!-- Login -->
     <a
       *ngIf="!isLoggedIn"
       routerLink="/login"
-      target="_blank"
       class="login-btn"
     >
       Login
     </a>
-
-    <!-- Logout shown if user logged in -->
+ 
+    <!-- Logout -->
     <button
       *ngIf="isLoggedIn"
       (click)="logout()"
@@ -28,5 +25,4 @@
   </div>
 </nav>
 
-<!-- Router outlet for all pages -->
 <router-outlet></router-outlet>

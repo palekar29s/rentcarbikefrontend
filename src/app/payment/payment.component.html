@@ -1,1 +1,23 @@
-<p>payment working in processss!</p>
+<div class="payment-container">
+
+  <h2>Payment</h2>
+
+  <p class="payment-info">
+    Scan the QR code below using any UPI app to complete your payment.
+  </p>
+
+  <!-- Dummy Scanner Image -->
+  <div class="scanner-box">
+    <img src="assets/scanner.png" alt="Payment Scanner">
+  </div>
+
+  <p class="note">
+    After completing the payment, click the button below.
+  </p>
+
+  <button class="pay-btn" (click)="paymentDone()">
+  Payment Done
+</button>
+
+
+</div>

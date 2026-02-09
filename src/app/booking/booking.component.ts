@@ -1,41 +1,119 @@
-import { DatePipe, NgFor, NgIf } from '@angular/common';
+import { CommonModule, DatePipe, NgFor, NgIf } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { pipe } from 'rxjs';
+import { LoginService } from '../login.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-booking',
-  imports: [NgIf,NgFor,DatePipe],
+  imports: [CommonModule,FormsModule],
   templateUrl: './booking.component.html',
   styleUrl: './booking.component.css'
 })
 export class BookingComponent implements OnInit {
-  activeTab: string = 'booking';
-  vehicles: any[] = [];
-  history: any[] = [];
 
-  constructor(private http: HttpClient, private router: Router) {}
+  // 🔹 Logged-in user ID
+  loggedInUserId: number = 0;
 
-  ngOnInit() {
-    this.loadVehicles();
-    this.loadHistory();
+  bookingData = {
+    userId: 0,
+    vehicleId: 0,
+    startDate: '',
+    endDate: '',
+    totalPrice: 0,
+    bookingStatus: 'created'
+  };
+
+  pricePerDay = 0;
+  pricePerHour = 0;
+
+  constructor(
+    private loginService: LoginService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+
+    // ✅ Get user ID from login service
+    this.loggedInUserId = this.loginService.getUserId();
+
+    if (!this.loggedInUserId) {
+      alert('Please login first');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    // ✅ Get selected vehicle
+    const vehicle = this.loginService.getSelectedVehicle();
+    if (vehicle) {
+      this.bookingData.vehicleId = vehicle.vehicleId;
+      this.pricePerDay = vehicle.pricePerDay;
+      this.pricePerHour = vehicle.pricePerHour;
+    }
   }
 
-  loadVehicles() {
-    // Replace with your API
-    this.http.get<any[]>('https://your-api.com/vehicles')
-      .subscribe(res => this.vehicles = res, err => console.error(err));
+  // 🔹 Calculate price
+  calculateTotalPrice() {
+    if (!this.bookingData.startDate || !this.bookingData.endDate) {
+      alert('Please select start and end date first');
+      return;
+    }
+
+    const start = new Date(this.bookingData.startDate);
+    const end = new Date(this.bookingData.endDate);
+
+    if (end <= start) {
+      alert('End date must be after start date');
+      return;
+    }
+
+    const diffMs = end.getTime() - start.getTime();
+    const diffHours = Math.ceil(diffMs / (1000 * 60 * 60));
+
+    this.bookingData.totalPrice =
+      diffHours >= 24
+        ? Math.ceil(diffHours / 24) * this.pricePerDay
+        : diffHours * this.pricePerHour;
+
+    alert(`Calculated Total Price: ₹${this.bookingData.totalPrice}`);
   }
 
-  loadHistory() {
-    // Replace with your API, send userId to get past bookings
-    this.http.get<any[]>('https://your-api.com/bookings/history')
-      .subscribe(res => this.history = res, err => console.error(err));
-  }
+  // 🔹 Submit booking
+  submitBooking() {
 
-  bookVehicle(vehicleId: number) {
-    // Navigate to booking form/page or open modal
-    this.router.navigate(['/booking/form'], { queryParams: { vehicleId } });
+    if (
+      !this.loggedInUserId ||
+      !this.bookingData.vehicleId ||
+      !this.bookingData.startDate ||
+      !this.bookingData.endDate ||
+      !this.bookingData.totalPrice
+    ) {
+      alert('Please fill all fields');
+      return;
+    }
+
+    const payload = {
+      ...this.bookingData,
+      userId: this.loggedInUserId,
+      startDate: new Date(this.bookingData.startDate).toISOString(),
+      endDate: new Date(this.bookingData.endDate).toISOString()
+    };
+
+    this.loginService.createBooking(payload).subscribe({
+      next: (res: any) => {
+
+        // ✅ SAVE bookingId for payment page
+        localStorage.setItem('bookingId', res.bookingId);
+
+        alert('Booking created successfully!');
+        this.router.navigate(['/payment']);
+      },
+      error: (err) => {
+        console.error('Booking failed:', err);
+        alert('Booking failed!');
+      }
+    });
   }
 }

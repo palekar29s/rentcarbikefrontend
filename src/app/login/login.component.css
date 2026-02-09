@@ -1,105 +1,134 @@
-/* Container styling */
+/* ======================
+   CARD
+====================== */
 .login-container {
-    width: 100%;
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-  }
-  
-  /* Title styling */
-  .login-container h2 {
-    margin-bottom: 20px;
-    font-size: 24px;
-    color: #333;
-  }
-  
-  /* Label styling */
-  .login-container label {
-    display: block;
-    text-align: left;
-    font-weight: 600;
-    margin-bottom: 5px;
-    color: #333;
-  }
-  
-  /* Input fields */
-  .login-container input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    transition: border-color 0.3s ease-in-out;
-  }
-  
-  /* Input focus effect */
-  .login-container input:focus {
-    border-color: #4CAF50;
-    outline: none;
-  }
-  
-  /* Button container for spacing */
-  .login-container button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s ease-in-out;
-  }
-  
-  /* Login button */
-  .login-container button[type="submit"] {
-    background-color: #4CAF50;
-    color: white;
-  }
-  
-  .login-container button[type="submit"]:hover {
-    background-color: #45a049;
-  }
-  
-  /* Register and Logout buttons */
-  .login-container button:not([type="submit"]) {
-    background-color: #2196F3;
-    color: white;
-    margin-top: 10px;
-  }
-  
-  .login-container button:not([type="submit"]):hover {
-    background-color: #1e87db;
-  }
-  
-  /* Error message styling */
-  .error {
-    color: red;
-    margin-top: 10px;
-    font-size: 14px;
-    font-weight: bold;
-  }
-  
-  /*--------------------------------/*
-  /* Container for the password field and eye icon */
-.password-container {
+  width: 340px;
+  margin: 80px auto;
+  padding: 30px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+
+/* ======================
+   FORM
+====================== */
+.form-group {
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  display: block;
+}
+
+
+/* ======================
+   INPUT
+====================== */
+input {
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  transition: 0.2s;
+}
+
+input:focus {
+  border-color: #4caf50;
+  box-shadow: 0 0 0 2px rgba(76,175,80,0.15);
+}
+
+
+/* ======================
+   PASSWORD WRAPPER
+====================== */
+.password-wrapper {
   position: relative;
+  width: 100%;
 }
 
-.eye-icon {
+/* give space for icon */
+.password-wrapper input {
+  padding-right: 45px;
+}
+
+
+/* ======================
+   EYE BUTTON
+====================== */
+.eye-btn {
   position: absolute;
-  right: 10px;
   top: 50%;
+  right: 10px;
   transform: translateY(-50%);
+  background: none;
+  border: none;
   cursor: pointer;
-  font-size: 20px;
-  color: #888;
+  color: #666;
+  font-size: 18px;
+  z-index: 10;
 }
 
-.eye-icon:hover {
-  color: #333;
+.eye-btn:hover {
+  color: #000;
+}
+
+
+/* ======================
+   BUTTONS
+====================== */
+.login-btn {
+  width: 100%;
+  padding: 12px 0;
+  margin-top: 8px;
+  background: #4caf50;
+  color: white;
+  border-radius: 6px;
+}
+
+.login-btn:hover {
+  background: #43a047;
+}
+
+.register-btn {
+  width: 100%;
+  padding: 12px 0;
+  margin-top: 10px;
+  background: #2196f3;
+  color: white;
+  border-radius: 6px;
+}
+
+.register-btn:hover {
+  background: #1976d2;
+}
+
+
+/* ======================
+   ERROR
+====================== */
+.error {
+  margin-top: 10px;
+  color: red;
+  font-size: 13px;
+}
+
+
+/* ======================
+   RESPONSIVE
+====================== */
+@media (max-width: 480px) {
+  .login-container {
+    width: 90%;
+  }
 }

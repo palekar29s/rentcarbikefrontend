@@ -1,61 +1,71 @@
-<!-- Hero Section -->
+<!-- HERO SECTION -->
 <section class="hero">
-  <img src="assets/carbikebanner.png" alt="Home Banner" class="home-banner" />
+  <img
+    class="hero-slide"
+    [src]="heroImages[currentHeroIndex]"
+    alt="Hero Banner"
+  />
+
   <div class="hero-text">
     <h1>Welcome to FastRent</h1>
     <p>Rent Cars & Bikes Easily, Anytime, Anywhere!</p>
-    <a routerLink="/booking" class="cta-btn">Book Now</a>
+
+    <!-- Scroll to steps -->
+    <a class="cta-btn" (click)="scrollToSteps()">Book Now</a>
   </div>
 </section>
 
-<!-- Services Section -->
-<section class="services">
+
+
+<!-- BOOK YOUR RIDE SECTION -->
+<section class="book-ride">
   <h2>Book Your Ride</h2>
-  <div class="service-cards">
-    <div class="card">
-      <img src="assets/car.png" alt="Car" />
-      <h3>Cars</h3>
-      <p>Choose from a wide range of cars for your trip.</p>
-      <a routerLink="/booking?type=car" class="cta-btn">Book Car</a>
-    </div>
-    <div class="card">
-      <img src="assets/bike.png" alt="Bike" />
-      <h3>Bikes</h3>
-      <p>Fast and easy bike rentals for your daily needs.</p>
-      <a routerLink="/booking?type=bike" class="cta-btn">Book Bike</a>
+  <p>Search available cars & bikes and book instantly</p>
+
+  <a routerLink="/search" class="cta-btn">
+    Go to Search
+  </a>
+</section>
+
+<!-- BOOKING STEPS -->
+<section class="stepper-container" #stepsSection>
+  <h2 class="step-title">How Booking Works</h2>
+
+  <div class="stepper">
+    <div
+      *ngFor="let step of steps; let i = index"
+      class="step"
+      [class.active]="currentStep === i + 1"
+      [class.completed]="currentStep > i + 1"
+    >
+      <div class="circle">{{ i + 1 }}</div>
+      <div class="label">{{ step }}</div>
+
+      <div class="line" *ngIf="i < steps.length - 1">
+        <div
+          class="line-progress"
+          [style.width.%]="currentStep > i + 1 ? 100 : 0"
+        ></div>
+      </div>
     </div>
   </div>
+
+ <div class="buttons">
+  <button type="button" (click)="prevStep()" [disabled]="currentStep === 1">
+    Previous
+  </button>
+
+  <button type="button" (click)="nextStep()" [disabled]="currentStep === steps.length">
+    Next
+  </button>
+</div>
 </section>
 
-<!-- Search Section -->
-<section class="search-bar">
-  <h2>Find Your Vehicle</h2>
-  <form>
-    <!-- Vehicle Type -->
-    <select [(ngModel)]="filter.vehicle" (change)="filterVehicles()" name="vehicle">
-      <option value="">Select Vehicle</option>
-      <option value="car">Car</option>
-      <option value="bike">Bike</option>
-    </select>
-
-    <!-- Check-in Date -->
-    <input type="date" [(ngModel)]="filter.checkin" (change)="filterVehicles()" name="checkin" />
-
-    <!-- Check-out Date -->
-    <input type="date" [(ngModel)]="filter.checkout" (change)="filterVehicles()" name="checkout" />
-
-    <!-- Location -->
-    <select [(ngModel)]="filter.location" (change)="filterVehicles()" name="location">
-      <option value="">Select Location</option>
-      <option value="mumbai">Mumbai</option>
-      <option value="navi-mumbai">Navi Mumbai</option>
-    </select>
-  </form>
-</section>
-
-
-<!-- Info Section -->
+<!-- INFO -->
 <section class="info">
   <h2>Why Choose FastRent?</h2>
-  <p>We provide affordable and reliable cars & bikes for your trips. Safe, insured, and easy to book!</p>
+  <p>
+    Affordable, reliable & insured vehicles.
+    Easy booking and smooth rides every time.
+  </p>
 </section>

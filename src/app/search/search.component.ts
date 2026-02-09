@@ -13,8 +13,8 @@ import { Router } from '@angular/router';
 })
 export class SearchComponent implements OnInit {
 
-  filter: any = {
-    vehicle: '',    // car or bike
+  filter = {
+    vehicle: 'car',   // default
     checkin: '',
     checkout: '',
     location: '',
@@ -22,25 +22,32 @@ export class SearchComponent implements OnInit {
   };
 
   vehicles: any[] = [];
-  searched: boolean = false;
+  selectedVehicle: any = null;
 
-  private filterChange: Subject<void> = new Subject<void>();
+  private filterChange = new Subject<void>();
 
-  selectedVehicle: any = null; // For modal
+  private API_URL =
+    'https://localhost:44320/api/Vehicle/getvehicleswithimagess';
 
   constructor(private http: HttpClient, private router: Router) {}
 
   ngOnInit() {
-    this.filterChange.pipe(debounceTime(300)).subscribe(() => this.fetchVehicles());
+    this.filterChange
+      .pipe(debounceTime(300))
+      .subscribe(() => this.fetchVehicles());
 
-    // Load all vehicles initially
     this.fetchVehicles();
   }
 
-  onVehicleChange() {
-    if (this.filter.vehicle !== 'car') {
+  /* CAR / BIKE TAB */
+  selectVehicleType(type: 'car' | 'bike') {
+    this.filter.vehicle = type;
+
+    // Seats not applicable for bike
+    if (type === 'bike') {
       this.filter.seats = '';
     }
+
     this.filterChange.next();
   }
 
@@ -48,45 +55,65 @@ export class SearchComponent implements OnInit {
     this.filterChange.next();
   }
 
+  /* FETCH FROM API (NO FRONTEND FILTERING) */
   private fetchVehicles() {
     let params = new HttpParams();
-    if (this.filter.vehicle) params = params.set('vehicle', this.filter.vehicle);
-    if (this.filter.checkin) params = params.set('checkin', this.filter.checkin);
-    if (this.filter.checkout) params = params.set('checkout', this.filter.checkout);
-    if (this.filter.location) params = params.set('location', this.filter.location);
-    if (this.filter.seats) params = params.set('seats', this.filter.seats);
 
-    this.http.get<any[]>('https://localhost:44320/api/Vehicle/getvehicleswithimages', { params })
-      .subscribe(
-        vehicles => {
-          // Pick one main image for each vehicle
-          vehicles.forEach(v => {
-            if (v.images && v.images.length > 0) {
-              const randomIndex = Math.floor(Math.random() * v.images.length);
-              v.imageUrl = v.images[randomIndex].imageUrl; // Pick one image
-            } else {
-              v.imageUrl = 'assets/default-car.png'; // fallback
-            }
-          });
+    if (this.filter.vehicle) {
+      params = params.set('vehicle', this.filter.vehicle);
+    }
 
-          this.vehicles = vehicles;
-          this.searched = true;
-        },
-        err => {
-          console.error(err);
-          this.vehicles = [];
-          this.searched = true;
-        }
+    if (this.filter.location) {
+      params = params.set('location', this.filter.location);
+    }
+
+    if (this.filter.seats) {
+      params = params.set('seats', this.filter.seats);
+    }
+
+    // IMPORTANT: Date must be ISO → backend DateTime?
+    if (this.filter.checkin) {
+      params = params.set(
+        'checkin',
+        new Date(this.filter.checkin).toISOString()
       );
+    }
+
+    if (this.filter.checkout) {
+      params = params.set(
+        'checkout',
+        new Date(this.filter.checkout).toISOString()
+      );
+    }
+
+    this.http.get<any[]>(this.API_URL, { params }).subscribe({
+      next: (data) => {
+        data.forEach(v => {
+          // main image
+          v.imageUrl = v.images?.length
+            ? v.images[0].imageUrl
+            : 'assets/default.png';
+        });
+
+        this.vehicles = data;
+      },
+      error: (err) => {
+        console.error('API ERROR', err);
+        this.vehicles = [];
+      }
+    });
   }
 
-  // Navigate to booking page
+  /* NAVIGATION */
   goToBooking(vehicleId: number) {
-    this.router.navigate(['/bookingvehicle'], { queryParams: { vehicleId } });
+    this.router.navigate(['/bookingvehicle'], {
+      queryParams: { vehicleId }
+    });
   }
 
-  // Open modal to show all images
-  openImageModal(vehicle: any) {
+  /* IMAGE MODAL */
+  openImageModal(vehicle: any, event: Event) {
+    event.stopPropagation();
     this.selectedVehicle = vehicle;
   }
 
