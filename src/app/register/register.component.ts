@@ -23,7 +23,7 @@ export class RegisterComponent {
     phone: ''
   };
 
-  apiUrl = 'https://localhost:44320/api/Login/insert-the-user-deatils';
+  apiUrl = 'https://localhost:44320/api/Login';
 
   onSubmit(form: NgForm) {
 
