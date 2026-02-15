@@ -17,65 +17,69 @@
   </div>
 
   <!-- FILTERS -->
-<form class="filters">
+  <form class="filters">
 
-  <!-- CHECK-IN -->
-  <div class="filter-item">
-    <label>📅 Pick-up Date</label>
-    <input
-      type="date"
-      [(ngModel)]="filter.checkin"
-      name="checkin"
-      (change)="searchVehicles()" />
-  </div>
+    <div class="filter-item">
+      <label>📅 Pick-up Date</label>
+      <input type="date"
+        [(ngModel)]="filter.checkin"
+        name="checkin"
+        (change)="searchVehicles()" />
+    </div>
 
-  <!-- CHECK-OUT -->
-  <div class="filter-item">
-    <label>📅 Drop-off Date</label>
-    <input
-      type="date"
-      [(ngModel)]="filter.checkout"
-      name="checkout"
-      (change)="searchVehicles()" />
-  </div>
+    <div class="filter-item">
+      <label>📅 Drop-off Date</label>
+      <input type="date"
+        [(ngModel)]="filter.checkout"
+        name="checkout"
+        (change)="searchVehicles()" />
+    </div>
 
-  <!-- LOCATION -->
-  <div class="filter-item">
-    <label>📍 Location</label>
-    <select
-      [(ngModel)]="filter.location"
-      name="location"
-      (change)="searchVehicles()">
-      <option value="">Select Location</option>
-      <option value="mumbai">Mumbai</option>
-      <option value="navi-mumbai">Navi Mumbai</option>
-    </select>
-  </div>
+    <div class="filter-item">
+      <label>📍 Location</label>
+      <select
+        [(ngModel)]="filter.location"
+        name="location"
+        (change)="searchVehicles()">
+        <option value="">Select Location</option>
+        <option value="mumbai">Mumbai</option>
+        <option value="navi-mumbai">Navi Mumbai</option>
+      </select>
+    </div>
 
-  <!-- SEATS (ONLY CAR) -->
-  <div class="filter-item" *ngIf="filter.vehicle === 'car'">
-    <label>🪑 Seats</label>
-    <select
-      [(ngModel)]="filter.seats"
-      name="seats"
-      (change)="searchVehicles()">
-      <option value="">Select Seats</option>
-      <option value="4">4 Seats</option>
-      <option value="6">6 Seats</option>
-    </select>
-  </div>
+    <div class="filter-item" *ngIf="filter.vehicle === 'car'">
+      <label>🪑 Seats</label>
+      <select
+        [(ngModel)]="filter.seats"
+        name="seats"
+        (change)="searchVehicles()">
+        <option value="">Select Seats</option>
+        <option value="4">4 Seats</option>
+        <option value="6">6 Seats</option>
+      </select>
+    </div>
 
-</form>
-
+  </form>
 
   <!-- VEHICLE CARDS -->
   <div class="vehicle-cards">
-    <div
-      class="card"
+
+    <!-- ✅ ADMIN ADD CARD -->
+    <div class="card add-card"
+      *ngIf="isAdmin"
+      (click)="goToAddVehicle()">
+
+      <div class="add-content">
+        <h2>➕</h2>
+        <p>Add New Vehicle</p>
+      </div>
+    </div>
+
+    <!-- VEHICLE LIST -->
+    <div class="card"
       *ngFor="let v of vehicles"
       (click)="goToBooking(v.vehicleId)">
 
-      <!-- IMAGE CLICK → MODAL -->
       <img
         class="main-image"
         [src]="v.imageUrl"
@@ -88,8 +92,17 @@
         <p *ngIf="v.type === 'car'">Seats: {{ v.seats }}</p>
         <p>Price: ₹{{ v.pricePerDay }}/day</p>
         <p>Status: {{ v.status }}</p>
+
+        <!-- ✅ DELETE BUTTON ADMIN ONLY -->
+        <button
+          *ngIf="isAdmin"
+          class="delete-btn"
+          (click)="deleteVehicle(v.vehicleId, $event)">
+          ❌ Delete
+        </button>
       </div>
     </div>
+
   </div>
 </section>
 

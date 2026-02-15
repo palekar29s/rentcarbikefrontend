@@ -1,90 +1,89 @@
-<form (ngSubmit)="onSubmit(form)" #form="ngForm" novalidate>
+<div class="register-wrapper">
 
-  <!-- USERNAME -->
-  <label>Username</label>
-  <input
-    type="text"
-    name="username"
-    [(ngModel)]="user.username"
-    #username="ngModel"
-    required
-  />
-  <small *ngIf="username.invalid && username.touched">
-    Username is required
-  </small>
+  <form (ngSubmit)="onSubmit(form)" #form="ngForm" novalidate>
 
+    <h2>Create Account</h2>
 
-  <!-- PASSWORD -->
-  <label>Password</label>
-  <input
-    type="password"
-    name="passwordHash"
-    [(ngModel)]="user.passwordHash"
-    #password="ngModel"
-    required
-    minlength="8"
-  />
-  <small *ngIf="password.errors?.['required'] && password.touched">
-    Password is required
-  </small>
-  <small *ngIf="password.errors?.['minlength'] && password.touched">
-    Minimum 8 characters required
-  </small>
+    <!-- FULL NAME -->
+    <div class="input-group">
+      <input type="text" name="fullName"
+        [(ngModel)]="user.fullName"
+        #fullName="ngModel"
+        required />
+      <label>Full Name</label>
+      <small *ngIf="fullName.invalid && fullName.touched">
+        Full Name is required
+      </small>
+    </div>
 
+    <!-- EMAIL -->
+    <div class="input-group">
+      <input type="email" name="email"
+        [(ngModel)]="user.email"
+        #email="ngModel"
+        required email />
+      <label>Email</label>
+      <small *ngIf="email.invalid && email.touched">
+        Enter valid email
+      </small>
+    </div>
 
-  <!-- FULL NAME -->
-  <label>Full Name</label>
-  <input
-    type="text"
-    name="fullName"
-    [(ngModel)]="user.fullName"
-    #fullName="ngModel"
-    required
-  />
-  <small *ngIf="fullName.invalid && fullName.touched">
-    Full Name is required
-  </small>
+    <!-- PHONE -->
+    <div class="input-group">
+      <input type="text" name="phone"
+        [(ngModel)]="user.phone"
+        #phone="ngModel"
+        required pattern="^[0-9]{10}$" />
+      <label>Phone</label>
+      <small *ngIf="phone.invalid && phone.touched">
+        Enter valid 10 digit number
+      </small>
+    </div>
 
+    <!-- USERNAME -->
+    <div class="input-group">
+      <input type="text" name="username"
+        [(ngModel)]="user.username"
+        #username="ngModel"
+        required />
+      <label>Username</label>
+      <small *ngIf="username.invalid && username.touched">
+        Username is required
+      </small>
+    </div>
 
-  <!-- EMAIL -->
-  <label>Email</label>
-  <input
-    type="email"
-    name="email"
-    [(ngModel)]="user.email"
-    #email="ngModel"
-    required
-    email
-  />
-  <small *ngIf="email.errors?.['required'] && email.touched">
-    Email is required
-  </small>
-  <small *ngIf="email.errors?.['email'] && email.touched">
-    Enter valid email address
-  </small>
+    <!-- PASSWORD -->
+    <div class="input-group password-group">
+      <input [type]="showPassword ? 'text' : 'password'"
+        name="passwordHash"
+        [(ngModel)]="user.passwordHash"
+        #password="ngModel"
+        required maxlength="8" />
+      <label>Password</label>
+      <span class="eye" (click)="togglePassword()">
+        {{ showPassword ? '🙈' : '👁' }}
+      </span>
+      <small *ngIf="password.invalid && password.touched">
+        Minimum 8 characters
+      </small>
+    </div>
 
+     <!-- SUBMIT -->
+    <button type="submit" [disabled]="form.invalid || loading">
+      <span *ngIf="!loading">Register</span>
+      <div *ngIf="loading" class="spinner"></div>
+    </button>
 
-  <!-- PHONE -->
-  <label>Phone</label>
-  <input
-    type="text"
-    name="phone"
-    [(ngModel)]="user.phone"
-    #phone="ngModel"
-    required
-    pattern="^[0-9]{10}$"
-  />
-  <small *ngIf="phone.errors?.['required'] && phone.touched">
-    Phone number is required
-  </small>
-  <small *ngIf="phone.errors?.['pattern'] && phone.touched">
-    Enter valid 10 digit number
-  </small>
+  </form>
 
+  <!-- ✅ SUCCESS POPUP (AFTER FORM) -->
+  <div class="popup-overlay" *ngIf="showSuccess">
+    <div class="popup-box">
+      <div class="popup-icon">✔</div>
+      <h3>Registration Successful!</h3>
+      <p>Your account has been created successfully.</p>
+      <button (click)="goToLogin()">Go to Login</button>
+    </div>
+  </div>
 
-  <!-- SUBMIT -->
-  <button type="submit" [disabled]="form.invalid">
-    Register
-  </button>
-
-</form>
+</div>

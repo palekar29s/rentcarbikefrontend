@@ -1,72 +1,186 @@
-/* Page background */
-body {
+/* ===============================
+   WRAPPER
+================================= */
+.register-wrapper {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: linear-gradient(135deg, #667eea, #764ba2);
-  font-family: Arial, Helvetica, sans-serif;
-  margin: 0;
-  height: 100vh;
 }
 
-/* Center the form */
+/* ===============================
+   FORM CARD
+================================= */
 form {
-  width: 380px;
-  margin: 60px auto;
-  padding: 30px 35px;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  width: 400px;
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  animation: fadeIn 0.6s ease;
 }
 
-/* Labels */
-label {
-  font-size: 14px;
-  font-weight: 600;
-  color: #444;
-  display: block;
-  margin-bottom: 6px;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* Inputs */
-input {
+h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+/* ===============================
+   INPUT GROUP
+================================= */
+.input-group {
+  position: relative;
+  margin-bottom: 25px;
+}
+
+.input-group input {
   width: 100%;
-  padding: 10px 12px;
-  margin-bottom: 18px;
-  border: 1px solid #dcdcdc;
-  border-radius: 6px;
+  padding: 14px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
   font-size: 14px;
   transition: 0.3s;
 }
 
-/* Input focus effect */
-input:focus {
-  outline: none;
+.input-group input:focus {
   border-color: #667eea;
-  box-shadow: 0 0 5px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 0 6px rgba(102,126,234,0.4);
 }
 
-/* Submit button */
+/* Floating label */
+.input-group label {
+  position: absolute;
+  top: 14px;
+  left: 12px;
+  color: #777;
+  font-size: 14px;
+  transition: 0.3s;
+  background: white;
+  padding: 0 4px;
+}
+
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+  top: -8px;
+  font-size: 12px;
+  color: #667eea;
+}
+
+/* ===============================
+   PASSWORD EYE
+================================= */
+.password-group .eye {
+  position: absolute;
+  right: 12px;
+  top: 14px;
+  cursor: pointer;
+}
+
+/* ===============================
+   BUTTON
+================================= */
 button {
   width: 100%;
-  padding: 12px;
-  background-color: #667eea;
-  color: white;
+  padding: 13px;
+  border-radius: 8px;
   border: none;
-  border-radius: 6px;
-  font-size: 15px;
+  background: #667eea;
+  color: white;
   font-weight: bold;
   cursor: pointer;
   transition: 0.3s;
 }
 
-/* Hover */
 button:hover {
-  background-color: #5563d6;
-  transform: translateY(-2px);
+  background: #5563d6;
 }
 
-/* Small screen responsive */
-@media (max-width: 480px) {
-  form {
-    width: 90%;
-    margin: 30px auto;
-  }
+button:disabled {
+  background: #aaa;
+  cursor: not-allowed;
+}
+
+/* ===============================
+   ERROR TEXT
+================================= */
+small {
+  color: red;
+  font-size: 12px;
+}
+
+/* ===============================
+   POPUP OVERLAY
+================================= */
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeInOverlay 0.3s ease;
+  z-index: 1000;
+}
+
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ===============================
+   POPUP BOX
+================================= */
+.popup-box {
+  background: white;
+  padding: 40px;
+  width: 320px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  animation: popupScale 0.3s ease;
+}
+
+@keyframes popupScale {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.popup-icon {
+  font-size: 40px;
+  color: #4CAF50;
+  margin-bottom: 10px;
+}
+
+.popup-box h3 {
+  margin: 10px 0;
+  color: #333;
+}
+
+.popup-box p {
+  font-size: 14px;
+  color: #666;
+}
+
+.popup-box button {
+  margin-top: 15px;
+  padding: 10px 15px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.popup-box button:hover {
+  background: #5563d6;
 }

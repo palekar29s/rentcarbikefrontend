@@ -37,6 +37,24 @@ export class LoginComponent implements OnInit {
   }
 
   login(): void {
+
+    // ✅ ADMIN LOGIN (HARDCODED)
+    if (this.username === 'admin' && this.passwordHash === '2902004') {
+
+      const adminUser = {
+        userId: 0,
+        username: 'admin'
+      };
+
+      this.loginService.setLoggedInUser(adminUser);
+
+      this.isLoggedIn = true;
+      this.loginError = '';
+      this.router.navigate(['/home']);
+      return;
+    }
+
+    // ✅ NORMAL USER LOGIN
     const user = this.loginDetails.find(
       u =>
         u.username === this.username &&
@@ -48,12 +66,10 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    // ✅ Store userId + username
     this.loginService.setLoggedInUser(user);
 
     this.isLoggedIn = true;
     this.loginError = '';
-
     this.router.navigate(['/home']);
   }
 
@@ -71,13 +87,11 @@ export class LoginComponent implements OnInit {
   }
 
   togglePasswordVisibility(): void {
-  this.passwordType =
-    this.passwordType === 'password' ? 'text' : 'password';
-}
-
+    this.passwordType =
+      this.passwordType === 'password' ? 'text' : 'password';
+  }
 
   goToRegister(): void {
     this.router.navigate(['/register']);
   }
-  
 }
