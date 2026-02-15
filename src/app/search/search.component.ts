@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { NgFor, NgIf } from '@angular/common';
 import { debounceTime, Subject, forkJoin } from 'rxjs';
 import { Router } from '@angular/router';
+import { LoginService } from '../login.service';
 
 @Component({
   selector: 'app-search',
@@ -14,7 +15,7 @@ import { Router } from '@angular/router';
 export class SearchComponent implements OnInit {
 
   filter = {
-    vehicle: 'car',   // default
+    vehicle: 'car',
     checkin: '',
     checkout: '',
     location: '',
@@ -23,15 +24,23 @@ export class SearchComponent implements OnInit {
 
   vehicles: any[] = [];
   selectedVehicle: any = null;
+  isAdmin: boolean = false;
 
   private filterChange = new Subject<void>();
 
-  private API_URL =
-    'https://localhost:44320/api/Vehicle/getvehicleswithimagess';
+  // ✅ Base API URL
+  private BASE_URL = 'https://localhost:44320/api/Vehicle';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private loginService: LoginService
+  ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
+
+    this.isAdmin = this.loginService.isAdmin();
+
     this.filterChange
       .pipe(debounceTime(300))
       .subscribe(() => this.fetchVehicles());
@@ -39,11 +48,10 @@ export class SearchComponent implements OnInit {
     this.fetchVehicles();
   }
 
-  /* CAR / BIKE TAB */
-  selectVehicleType(type: 'car' | 'bike') {
+  // ✅ Vehicle Type Toggle
+  selectVehicleType(type: 'car' | 'bike'): void {
     this.filter.vehicle = type;
 
-    // Seats not applicable for bike
     if (type === 'bike') {
       this.filter.seats = '';
     }
@@ -51,73 +59,86 @@ export class SearchComponent implements OnInit {
     this.filterChange.next();
   }
 
-  searchVehicles() {
+  searchVehicles(): void {
     this.filterChange.next();
   }
 
-  /* FETCH FROM API (NO FRONTEND FILTERING) */
-  private fetchVehicles() {
-    let params = new HttpParams();
+  // ✅ Fetch Vehicles
+  private fetchVehicles(): void {
 
-    if (this.filter.vehicle) {
-      params = params.set('vehicle', this.filter.vehicle);
-    }
+    let params = new HttpParams()
+      .set('vehicle', this.filter.vehicle || '');
 
-    if (this.filter.location) {
+    if (this.filter.location)
       params = params.set('location', this.filter.location);
-    }
 
-    if (this.filter.seats) {
+    if (this.filter.seats)
       params = params.set('seats', this.filter.seats);
-    }
 
-    // IMPORTANT: Date must be ISO → backend DateTime?
-    if (this.filter.checkin) {
-      params = params.set(
-        'checkin',
-        new Date(this.filter.checkin).toISOString()
-      );
-    }
+    if (this.filter.checkin)
+      params = params.set('checkin', new Date(this.filter.checkin).toISOString());
 
-    if (this.filter.checkout) {
-      params = params.set(
-        'checkout',
-        new Date(this.filter.checkout).toISOString()
-      );
-    }
+    if (this.filter.checkout)
+      params = params.set('checkout', new Date(this.filter.checkout).toISOString());
 
-    this.http.get<any[]>(this.API_URL, { params }).subscribe({
-      next: (data) => {
-        data.forEach(v => {
-          // main image
-          v.imageUrl = v.images?.length
-            ? v.images[0].imageUrl
-            : 'assets/default.png';
-        });
+    this.http.get<any[]>(`${this.BASE_URL}/getvehicleswithimagess`, { params })
+      .subscribe({
+        next: (data) => {
 
-        this.vehicles = data;
-      },
-      error: (err) => {
-        console.error('API ERROR', err);
-        this.vehicles = [];
-      }
-    });
+          this.vehicles = data.map(v => ({
+            ...v,
+            imageUrl: v.images?.length
+              ? v.images[0].imageUrl
+              : 'assets/default.png'
+          }));
+
+        },
+        error: (err) => {
+          console.error('Fetch Error:', err);
+          this.vehicles = [];
+        }
+      });
   }
 
-  /* NAVIGATION */
-  goToBooking(vehicleId: number) {
+  // ✅ Navigate to Booking
+  goToBooking(vehicleId: number): void {
     this.router.navigate(['/bookingvehicle'], {
       queryParams: { vehicleId }
     });
   }
 
-  /* IMAGE MODAL */
-  openImageModal(vehicle: any, event: Event) {
+  // ✅ Navigate to Add Vehicle
+  goToAddVehicle(): void {
+    this.router.navigate(['/addvehicle']);
+  }
+
+  // ✅ Soft Delete (Set Unavailable)
+  deleteVehicle(vehicleId: number, event: Event): void {
+
+    event.stopPropagation();
+
+    if (!confirm('Are you sure you want to delete this vehicle?')) return;
+
+    this.http.delete(`${this.BASE_URL}/set-unavailable/${vehicleId}`)
+      .subscribe({
+        next: () => {
+          alert('Vehicle deleted successfully');
+          this.fetchVehicles();   // refresh list
+        },
+        error: (err) => {
+          console.error('Delete failed:', err);
+          alert('Delete failed');
+        }
+      });
+  }
+
+  // ✅ Image Modal
+  openImageModal(vehicle: any, event: Event): void {
     event.stopPropagation();
     this.selectedVehicle = vehicle;
   }
 
-  closeModal() {
+  closeModal(): void {
     this.selectedVehicle = null;
   }
 }

@@ -1,71 +1,47 @@
 <!-- HERO SECTION -->
 <section class="hero">
-  <img
-    class="hero-slide"
-    [src]="heroImages[currentHeroIndex]"
-    alt="Hero Banner"
-  />
+  <img class="hero-bg" [src]="heroImages[currentHeroIndex]" />
 
-  <div class="hero-text">
-    <h1>Welcome to FastRent</h1>
-    <p>Rent Cars & Bikes Easily, Anytime, Anywhere!</p>
+  <div class="hero-content">
+    <h1>Fast & Easy Vehicle Rentals</h1>
+    <p>Book cars and bikes instantly at affordable prices</p>
 
-    <!-- Scroll to steps -->
-    <a class="cta-btn" (click)="scrollToSteps()">Book Now</a>
+   <button class="cta-btn" (click)="goToSearch()">
+  Book Now
+</button>
   </div>
 </section>
 
+<!-- SERVICES SECTION -->
+<section class="services">
+  <h2>Our Services</h2>
 
+  <div class="service-grid">
+    <div class="service-card">
+      🚗 <h3>Car Rentals</h3>
+      <p>Daily & hourly rental options available.</p>
+    </div>
 
-<!-- BOOK YOUR RIDE SECTION -->
-<section class="book-ride">
-  <h2>Book Your Ride</h2>
-  <p>Search available cars & bikes and book instantly</p>
+    <div class="service-card">
+      🏍️ <h3>Bike Rentals</h3>
+      <p>Affordable bikes for city & long rides.</p>
+    </div>
 
-  <a routerLink="/search" class="cta-btn">
-    Go to Search
-  </a>
-</section>
-
-<!-- BOOKING STEPS -->
-<section class="stepper-container" #stepsSection>
-  <h2 class="step-title">How Booking Works</h2>
-
-  <div class="stepper">
-    <div
-      *ngFor="let step of steps; let i = index"
-      class="step"
-      [class.active]="currentStep === i + 1"
-      [class.completed]="currentStep > i + 1"
-    >
-      <div class="circle">{{ i + 1 }}</div>
-      <div class="label">{{ step }}</div>
-
-      <div class="line" *ngIf="i < steps.length - 1">
-        <div
-          class="line-progress"
-          [style.width.%]="currentStep > i + 1 ? 100 : 0"
-        ></div>
-      </div>
+    <div class="service-card">
+      ⚡ <h3>Instant Booking</h3>
+      <p>Quick and secure booking process.</p>
     </div>
   </div>
-
- <div class="buttons">
-  <button type="button" (click)="prevStep()" [disabled]="currentStep === 1">
-    Previous
-  </button>
-
-  <button type="button" (click)="nextStep()" [disabled]="currentStep === steps.length">
-    Next
-  </button>
-</div>
 </section>
 
-<!-- INFO -->
-<section class="info">
+<!-- WHY CHOOSE US -->
+<section class="why">
   <h2>Why Choose FastRent?</h2>
-  <p>
-    Affordable, reliable & insured vehicles.
-    Easy booking and smooth rides every time.
-  </p>
+
+  <div class="why-grid">
+    <div class="why-card">💳 Secure Payment</div>
+    <div class="why-card">🛡️ Fully Insured</div>
+    <div class="why-card">📍 Multiple Locations</div>
+    <div class="why-card">⭐ Trusted Service</div>
+  </div>
 </section>

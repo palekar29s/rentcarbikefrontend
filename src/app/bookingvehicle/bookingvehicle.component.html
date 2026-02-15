@@ -1,47 +1,63 @@
-<div class="details-box" *ngIf="vehicle">
+<div class="page-wrapper" *ngIf="vehicle">
 
-  <!-- IMAGE SLIDER -->
-  <div class="image-box" *ngIf="vehicle.images?.length">
-    <img
-      class="vehicle-image"
-      [src]="vehicle.images[currentImageIndex].imageUrl"
-      alt="Vehicle Image"
-    />
+  <div class="details-box">
 
-    <button class="nav left" (click)="prevImage()">❮</button>
-    <button class="nav right" (click)="nextImage()">❯</button>
+    <!-- IMAGE SLIDER -->
+    <div class="image-box" *ngIf="vehicle.images?.length">
+      <img
+        class="vehicle-image"
+        [src]="vehicle.images[currentImageIndex].imageUrl"
+        (click)="openModal()"
+      />
 
-    <div class="dots">
-      <span
-        *ngFor="let img of vehicle.images; let i = index"
-        (click)="goToImage(i)"
-        [class.active]="i === currentImageIndex">
+      <button class="nav left" (click)="prevImage()">❮</button>
+      <button class="nav right" (click)="nextImage()">❯</button>
+
+      <div class="dots">
+        <span
+          *ngFor="let img of vehicle.images; let i = index"
+          (click)="goToImage(i)"
+          [class.active]="i === currentImageIndex">
+        </span>
+      </div>
+    </div>
+
+    <!-- DETAILS -->
+    <h2>{{ vehicle.name }}</h2>
+
+    <!-- Rating Stars -->
+    <div class="rating">
+      <span *ngFor="let star of stars; let i = index"
+            [class.filled]="i < vehicle.rating">
+        ★
       </span>
     </div>
+
+    <div class="info-grid">
+      <p><b>Brand:</b> {{ vehicle.brand }}</p>
+      <p><b>Model:</b> {{ vehicle.model }}</p>
+      <p><b>Type:</b> {{ vehicle.type }}</p>
+      <p><b>Fuel:</b> {{ vehicle.fueltype }}</p>
+      <p><b>Transmission:</b> {{ vehicle.transmission }}</p>
+      <p><b>Seats:</b> {{ vehicle.seats }}</p>
+      <p><b>Location:</b> {{ vehicle.location }}</p>
+      <p><b>Available From:</b> {{ vehicle.startDate | date }}</p>
+      <p><b>Available Till:</b> {{ vehicle.endDate | date }}</p>
+      <p><b>Price (Hour):</b> ₹{{ vehicle.priceperhour }}</p>
+      <p><b>Price (Day):</b> ₹{{ vehicle.priceperday }}</p>
+      <p><b>Status:</b> {{ vehicle.status }}</p>
+    </div>
+
   </div>
 
-  <!-- VEHICLE DETAILS -->
-  <h2>{{ vehicle.name }}</h2>
-
-  <p><b>Brand:</b> {{ vehicle.brand }}</p>
-  <p><b>Model:</b> {{ vehicle.model }}</p>
-  <p><b>Type:</b> {{ vehicle.type }}</p>
-  <p><b>Fuel:</b> {{ vehicle.fueltype }}</p>
-  <p><b>Transmission:</b> {{ vehicle.transmission }}</p>
-  <p><b>Seats:</b> {{ vehicle.seats }}</p>
-  <p><b>Location:</b> {{ vehicle.location }}</p>
-
-  <p><b>Available From:</b> {{ vehicle.startDate | date }}</p>
-  <p><b>Available Till:</b> {{ vehicle.endDate | date }}</p>
-
-  <p><b>Price (Hour):</b> ₹{{ vehicle.priceperhour }}</p>
-  <p><b>Price (Day):</b> ₹{{ vehicle.priceperday }}</p>
-
-  <p><b>Status:</b> {{ vehicle.status }}</p>
-
-  <!-- ✅ FIXED BUTTON -->
-  <button class="book-btn" (click)="goToBooking(vehicle)">
-    Book Now
+  <!-- FLOATING BOOK BUTTON -->
+  <button class="floating-book" (click)="goToBooking(vehicle)">
+    🚀 Book Now
   </button>
+
+  <!-- FULL SCREEN MODAL -->
+  <div class="modal" *ngIf="isModalOpen" (click)="closeModal()">
+    <img [src]="vehicle.images[currentImageIndex].imageUrl" class="modal-img">
+  </div>
 
 </div>

@@ -11,6 +11,7 @@ import { authGuard } from './auth.guard';
 import { SuccessbookingComponent } from './successbooking/successbooking.component';
 import { BookinghistoryComponent } from './bookinghistory/bookinghistory.component';
 import { RegisterComponent } from './register/register.component';
+import { AddvehicleComponent } from './addvehicle/addvehicle.component';
 
 export const routes: Routes = [
 
@@ -26,6 +27,9 @@ export const routes: Routes = [
   
 { path: 'vehicleindet', component: VehicleindetailComponent },
 { path: 'payment', component: PaymentComponent },
+
+{ path: 'addvehicle', component: AddvehicleComponent },
+
 
 { path: 'vehicle/:id', component: VehicleindetailComponent },
 
