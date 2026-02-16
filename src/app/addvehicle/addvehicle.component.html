@@ -1,40 +1,79 @@
 <div class="form-container">
   <h2>Add Vehicle</h2>
 
-  <form (ngSubmit)="onSubmit()">
+  <form (ngSubmit)="onSubmit()" #form="ngForm">
 
-    <input type="text" placeholder="Vehicle Name" [(ngModel)]="vehicle.name" name="name" required>
+    <input type="text"
+           placeholder="Vehicle Name"
+           [(ngModel)]="vehicle.name"
+           name="name"
+           required>
 
-    <input type="text" placeholder="Type (Car/Bike)" [(ngModel)]="vehicle.type" name="type">
+    <input type="text"
+           placeholder="Type (Car/Bike)"
+           [(ngModel)]="vehicle.type"
+           name="type">
 
-    <input type="text" placeholder="Brand" [(ngModel)]="vehicle.brand" name="brand">
+    <input type="text"
+           placeholder="Brand"
+           [(ngModel)]="vehicle.brand"
+           name="brand">
 
-    <input type="text" placeholder="Model" [(ngModel)]="vehicle.model" name="model">
+    <input type="text"
+           placeholder="Model"
+           [(ngModel)]="vehicle.model"
+           name="model">
 
-    <input type="number" placeholder="Price Per Hour" [(ngModel)]="vehicle.priceperhour" name="priceperhour">
+    <input type="number"
+           placeholder="Price Per Hour"
+           [(ngModel)]="vehicle.priceperhour"
+           name="priceperhour">
 
-    <input type="number" placeholder="Price Per Day" [(ngModel)]="vehicle.priceperday" name="priceperday">
+    <input type="number"
+           placeholder="Price Per Day"
+           [(ngModel)]="vehicle.priceperday"
+           name="priceperday">
 
-    <input type="text" placeholder="Fuel Type" [(ngModel)]="vehicle.fueltype" name="fueltype">
+    <input type="text"
+           placeholder="Fuel Type"
+           [(ngModel)]="vehicle.fueltype"
+           name="fueltype">
 
-    <input type="text" placeholder="Transmission" [(ngModel)]="vehicle.transmission" name="transmission">
+    <input type="text"
+           placeholder="Transmission"
+           [(ngModel)]="vehicle.transmission"
+           name="transmission">
 
-    <input type="text" placeholder="Status" [(ngModel)]="vehicle.status" name="status">
+    <input type="text"
+           placeholder="Status"
+           [(ngModel)]="vehicle.status"
+           name="status">
 
-    <input type="text" placeholder="Location" [(ngModel)]="vehicle.location" name="location">
+    <input type="text"
+           placeholder="Location"
+           [(ngModel)]="vehicle.location"
+           name="location">
 
-    <input type="number" placeholder="Seats" [(ngModel)]="vehicle.seats" name="seats">
+    <input type="number"
+           placeholder="Seats"
+           [(ngModel)]="vehicle.seats"
+           name="seats">
 
     <label>Start Date</label>
-    <input type="datetime-local" [(ngModel)]="vehicle.startDate" name="startDate">
+    <input type="datetime-local"
+           [(ngModel)]="vehicle.startDate"
+           name="startDate">
 
     <label>End Date</label>
-    <input type="datetime-local" [(ngModel)]="vehicle.endDate" name="endDate">
-
-    <label>Select Images</label>
-    <input type="file" multiple (change)="onFileSelect($event)">
-
-    <button type="submit">Add Vehicle</button>
+    <input type="datetime-local"
+           [(ngModel)]="vehicle.endDate"
+           name="endDate">
+<input type="hidden"
+       [(ngModel)]="vehicle.imageUrl"
+       name="imageUrl">
+    <button type="submit">
+      Next → Add Images
+    </button>
 
   </form>
 </div>

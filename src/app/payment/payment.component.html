@@ -1,23 +1,87 @@
 <div class="payment-container">
 
-  <h2>Payment</h2>
+  <h2>Debit Card Payment</h2>
 
   <p class="payment-info">
-    Scan the QR code below using any UPI app to complete your payment.
+    Enter your debit card details to complete the payment.
   </p>
 
-  <!-- Dummy Scanner Image -->
-  <div class="scanner-box">
-    <img src="assets/scanner.png" alt="Payment Scanner">
-  </div>
+  <form #cardForm="ngForm">
 
-  <p class="note">
-    After completing the payment, click the button below.
-  </p>
+    <!-- Card Holder Name -->
+    <div class="form-group">
+      <label>Card Holder Name</label>
+      <input
+        type="text"
+        name="cardName"
+        [(ngModel)]="cardName"
+        required
+        placeholder="Enter card holder name"
+      />
+    </div>
 
-  <button class="pay-btn" (click)="paymentDone()">
-  Payment Done
-</button>
+    <!-- Card Number -->
+    <div class="form-group">
+      <label>Card Number</label>
+      <input
+        type="text"
+        name="cardNumber"
+        [(ngModel)]="cardNumber"
+        maxlength="16"
+        required
+        placeholder="1234 5678 9012 3456"
+      />
+    </div>
 
+    <!-- Expiry Date -->
+    <div class="form-row">
+      <div class="form-group">
+        <label>Expiry Month</label>
+        <input
+          type="text"
+          name="expiryMonth"
+          [(ngModel)]="expiryMonth"
+          maxlength="2"
+          required
+          placeholder="MM"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Expiry Year</label>
+        <input
+          type="text"
+          name="expiryYear"
+          [(ngModel)]="expiryYear"
+          maxlength="4"
+          required
+          placeholder="YYYY"
+        />
+      </div>
+    </div>
+
+    <!-- CVV -->
+    <div class="form-group">
+      <label>CVV</label>
+      <input
+        type="password"
+        name="cvv"
+        [(ngModel)]="cvv"
+        maxlength="3"
+        required
+        placeholder="123"
+      />
+    </div>
+
+    <button
+      type="button"
+      class="pay-btn"
+      (click)="paymentDone()"
+      [disabled]="isProcessing"
+    >
+      Pay Now
+    </button>
+
+  </form>
 
 </div>

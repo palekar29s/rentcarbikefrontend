@@ -35,7 +35,7 @@ export class ContactusComponent {
       message: this.message
     };
 
-    this.http.post(`https://yourapi.com/api/Contact/Submit`, contactData)
+    this.http.post(`https://localhost:44320/api/Contact`, contactData)
       .subscribe((res: any) => {
         this.successMessage = "Thank you! Our team will contact you soon.";
         this.name = "";
