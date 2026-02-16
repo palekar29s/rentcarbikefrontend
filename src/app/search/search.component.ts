@@ -48,7 +48,7 @@ export class SearchComponent implements OnInit {
     this.fetchVehicles();
   }
 
-  // ✅ Vehicle Type Toggle
+  // ✅ Toggle Vehicle Type
   selectVehicleType(type: 'car' | 'bike'): void {
     this.filter.vehicle = type;
 
@@ -63,7 +63,7 @@ export class SearchComponent implements OnInit {
     this.filterChange.next();
   }
 
-  // ✅ Fetch Vehicles
+  // ✅ Fetch Vehicles (ONLY AVAILABLE)
   private fetchVehicles(): void {
 
     let params = new HttpParams()
@@ -85,13 +85,15 @@ export class SearchComponent implements OnInit {
       .subscribe({
         next: (data) => {
 
-          this.vehicles = data.map(v => ({
-            ...v,
-            imageUrl: v.images?.length
-              ? v.images[0].imageUrl
-              : 'assets/default.png'
-          }));
-
+          // ✅ Show only Available vehicles
+          this.vehicles = data
+            .filter(v => v.status === 'Available')
+            .map(v => ({
+              ...v,
+              imageUrl: v.images?.length
+                ? v.images[0].imageUrl
+                : 'assets/default.png'
+            }));
         },
         error: (err) => {
           console.error('Fetch Error:', err);
@@ -107,29 +109,36 @@ export class SearchComponent implements OnInit {
     });
   }
 
-  // ✅ Navigate to Add Vehicle
+  // ✅ Navigate to Add Vehicle (Admin)
   goToAddVehicle(): void {
     this.router.navigate(['/addvehicle']);
   }
 
-  // ✅ Soft Delete (Set Unavailable)
+  // ✅ SET VEHICLE UNAVAILABLE (PUT API)
   deleteVehicle(vehicleId: number, event: Event): void {
 
     event.stopPropagation();
 
-    if (!confirm('Are you sure you want to delete this vehicle?')) return;
+    if (!confirm('Are you sure you want to set this vehicle as Unavailable?'))
+      return;
 
-    this.http.delete(`${this.BASE_URL}/set-unavailable/${vehicleId}`)
-      .subscribe({
-        next: () => {
-          alert('Vehicle deleted successfully');
-          this.fetchVehicles();   // refresh list
-        },
-        error: (err) => {
-          console.error('Delete failed:', err);
-          alert('Delete failed');
-        }
-      });
+    this.http.put(
+      `${this.BASE_URL}/set-unavailable/${vehicleId}`,
+      {},
+      { responseType: 'text' }   // 🔥 IMPORTANT FIX
+    ).subscribe({
+      next: (res) => {
+
+        alert(res);
+
+        // Remove from UI instantly
+        this.vehicles = this.vehicles.filter(v => v.vehicleId !== vehicleId);
+      },
+      error: (err) => {
+        console.error('FULL ERROR:', err);
+        alert('Update failed');
+      }
+    });
   }
 
   // ✅ Image Modal

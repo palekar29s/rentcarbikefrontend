@@ -1,0 +1,9 @@
+<div class="form-container">
+  <h2>Upload Vehicle Images</h2>
+
+  <p>Vehicle ID: {{ vehicleId }}</p>
+
+  <input type="file" multiple (change)="onFileSelect($event)">
+
+  <button (click)="uploadImages()">Upload Images</button>
+</div>

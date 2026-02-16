@@ -28,6 +28,15 @@ export const routes: Routes = [
 { path: 'vehicleindet', component: VehicleindetailComponent },
 { path: 'payment', component: PaymentComponent },
 
+{ path: 'addimages', component: AddvehicleComponent },
+{
+  path: 'add-images/:id',
+  loadComponent: () => import('./addimages/addimages.component')
+    .then(m => m.AddimagesComponent)
+},
+
+
+
 { path: 'addvehicle', component: AddvehicleComponent },
 
 
